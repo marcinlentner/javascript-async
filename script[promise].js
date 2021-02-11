@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "https://api.openweathermap.org/data/2.5/weather?q=castleford&units=metric&appid=" +
     apiKey;
 
-  // call request
-  // get(url, successHandler, failHandler);
-  console.log(get(url));
+  get(url).then(function (response) {
+    successHandler(response);
+  });
 });
