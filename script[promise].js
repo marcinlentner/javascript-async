@@ -46,5 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch(function (status) {
       failHandler(status);
+    })
+    .finally(function () {
+      const weatherDiv = document.querySelector("#weather");
+      const degrees = document.createElement("span");
+      degrees.innerHTML = "&deg;";
+      weatherDiv.appendChild(degrees);
     });
 });
