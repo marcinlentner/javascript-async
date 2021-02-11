@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
       failHandler(status);
     })
     .finally(function () {
+      // always executes
       const weatherDiv = document.querySelector("#weather");
       const degrees = document.createElement("span");
       degrees.innerHTML = "&deg;";
