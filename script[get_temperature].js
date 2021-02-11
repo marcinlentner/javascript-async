@@ -1,7 +1,7 @@
-// add global variable containing XHR object
+// instantiate object request
 let httpRequest = new XMLHttpRequest();
 
-// add get() function
+// open connection, prepare success handler, send request
 function get(url, success) {
   httpRequest.open("GET", url);
   httpRequest.onload = function () {
@@ -10,6 +10,7 @@ function get(url, success) {
   httpRequest.send();
 }
 
+// deal with data after asynchronous function returns
 function successHandler(data) {
   const dataObj = JSON.parse(data);
   const weatherDiv = document.querySelector("#weather");
@@ -19,12 +20,13 @@ function successHandler(data) {
   weatherDiv.innerHTML = weatherFragment;
 }
 
+// start the request
 document.addEventListener("DOMContentLoaded", function () {
   const apiKey = "31b82782921c63b3313e889b892c15b6";
   const url =
     "https://api.openweathermap.org/data/2.5/weather?q=castleford&units=metric&appid=" +
     apiKey;
 
-  // send request
+  // call request
   get(url, successHandler);
 });
