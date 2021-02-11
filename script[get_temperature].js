@@ -2,8 +2,11 @@
 let httpRequest = new XMLHttpRequest();
 
 // add get() function
-function get(url) {
+function get(url, success) {
   httpRequest.open("GET", url);
+  httpRequest.onload = function () {
+    success(httpRequest.responseText);
+  };
   httpRequest.send();
 }
 
@@ -19,11 +22,9 @@ function successHandler(data) {
 document.addEventListener("DOMContentLoaded", function () {
   const apiKey = "31b82782921c63b3313e889b892c15b6";
   const url =
-    "https://api.openweathermap.org/data/2.5/weather?q=castleford&appid=" +
+    "https://api.openweathermap.org/data/2.5/weather?q=castleford&units=metric&appid=" +
     apiKey;
 
   // send request
-  get(url);
-  // take data and do something with it
-  successHandler(httpRequest.responseText);
+  get(url, successHandler);
 });
