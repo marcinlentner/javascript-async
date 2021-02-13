@@ -54,8 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
     .finally(function () {
       // always executes
       const weatherDiv = document.querySelector("#weather");
-      const degrees = document.createElement("span");
-      degrees.innerHTML = "&deg;";
-      weatherDiv.appendChild(degrees);
+      weatherDiv.classList.add("green");
     });
 });

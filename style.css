@@ -1,0 +1,7 @@
+:root {
+  --google-green: #65cb57;
+}
+
+.green {
+  color: var(--google-green);
+}
