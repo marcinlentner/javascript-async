@@ -1,3 +1,7 @@
+/*
+ * JavaScript callback for retrieving data asynchronously
+ */
+
 // instantiate object request
 let httpRequest = new XMLHttpRequest();
 

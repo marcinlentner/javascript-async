@@ -1,3 +1,7 @@
+/*
+ * JavaScript Promise
+ */
+
 // instantiate object request
 let httpRequest = new XMLHttpRequest();
 
