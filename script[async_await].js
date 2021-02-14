@@ -3,11 +3,11 @@
  */
 
 // instantiate object request
-let httpRequest = new XMLHttpRequest();
 
 // open connection, prepare success handler, send request
 function get(url) {
   return new Promise(function (resolve, reject) {
+    let httpRequest = new XMLHttpRequest();
     httpRequest.open("GET", url);
     httpRequest.onload = function () {
       if (httpRequest.status === 200) {
@@ -16,6 +16,11 @@ function get(url) {
         reject(Error(httpRequest.status));
       }
     };
+    // Handle network errors
+    httpRequest.onerror = function () {
+      reject(Error("Network Error"));
+    };
+
     httpRequest.send();
   });
 }
@@ -23,39 +28,60 @@ function get(url) {
 // deal with data after asynchronous function returns
 function successHandler(data) {
   const dataObj = JSON.parse(data);
-  const weatherDiv = document.querySelector("#weather");
-  const weatherFragment = `
-  <h2>${dataObj.main.temp}</h2>
+  console.log(dataObj);
+  const div = `
+  <h2>${dataObj.name}: ${dataObj.main.temp}</h2>
   `;
-  weatherDiv.innerHTML = weatherFragment;
+  return div;
 }
 
 // deal with fail callback
 function failHandler(status) {
   console.log(status);
-  const weatherDiv = document.querySelector("#weather");
-  weatherDiv.innerHTML = "<p>Checking data...</p>";
 }
 
 // start the request
 document.addEventListener("DOMContentLoaded", function () {
   const apiKey = "31b82782921c63b3313e889b892c15b6";
-  const url =
-    "https://api.openweathermap.org/data/2.5/weather?q=castleford&units=metric&appid=" +
-    apiKey;
+  const weatherDiv = document.querySelector("#weather");
+  const locations = [
+    "castleford, gb",
+    "windermere, gb",
+    "york, gb",
+    "london, gb",
+  ];
 
-  get(url)
-    .then(function (response) {
-      successHandler(response);
-    })
-    .catch(function (status) {
-      failHandler(status);
-    })
-    .finally(function () {
-      // always executes
-      const weatherDiv = document.querySelector("#weather");
-      const degrees = document.createElement("span");
-      degrees.innerHTML = "&deg;";
-      weatherDiv.appendChild(degrees);
+  const urls = locations.map(function (location) {
+    return `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${apiKey}`;
+  });
+
+  // Promise.all([get(urls[0]), get(urls[1]), get(urls[2]), get(urls[3])])
+  //   .then(function (responses) {
+  //     return responses.map(function (response) {
+  //       return successHandler(response);
+  //     });
+  //   })
+  //   .then(function (literals) {
+  //     weatherDiv.innerHTML = `<h1>Weather</h1>${literals.join("")}`;
+  //   })
+  //   .catch(function (status) {
+  //     failHandler(status);
+  //   })
+  //   .finally(function () {
+  //     // always executes
+  //     weatherDiv.classList.add("green");
+  //   });
+
+  (async function () {
+    let responses = [];
+    responses.push(await get(urls[0]));
+    responses.push(await get(urls[1]));
+    responses.push(await get(urls[2]));
+    responses.push(await get(urls[3]));
+    let literals = responses.map(function (response) {
+      return successHandler(response);
     });
+    weatherDiv.innerHTML = `<h1>Weather</h1>${literals.join("")}`;
+    weatherDiv.classList.add("green");
+  })();
 });
